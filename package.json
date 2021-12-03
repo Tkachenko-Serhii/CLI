@@ -1,0 +1,27 @@
+{
+  "name": "node-js-hw-01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "start:dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tkachenko-Serhii/node-js-hw-01.git"
+  },
+  "author": "Serhii Tkachenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tkachenko-Serhii/node-js-hw-01/issues"
+  },
+  "homepage": "https://github.com/Tkachenko-Serhii/node-js-hw-01",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "commander": "^8.3.0",
+    "shortid": "^2.2.16"
+  }
+}
