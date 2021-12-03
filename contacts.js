@@ -26,10 +26,9 @@ async function listContacts() {
 async function getContactById(contactId) {
   try {
     const contactsArr = await getContactsList();
-    const id = parseInt(contactId);
 
     contactsArr.map((contact) => {
-      if (contact.id === id) {
+      if (contact.id === contactId) {
         console.table(contact);
       }
     });
@@ -41,16 +40,16 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
   try {
     const contactsArr = await getContactsList();
-    const id = parseInt(contactId);
-    let newArr = [];
+    let newContactsArr = [];
 
     contactsArr.map((contact) => {
-      if (contact.id !== id) {
-        newArr.push(contact);
+      if (contact.id !== contactId) {
+        newContactsArr.push(contact);
       }
     });
-
-    console.table(newArr);
+    const newContactsList = JSON.stringify(newContactsArr);
+    await fs.writeFile(contactsPath, newContactsList, "utf8");
+    console.table(newContactsArr);
   } catch (error) {
     console.log(error);
   }
@@ -59,6 +58,7 @@ async function removeContact(contactId) {
 async function addContact(name, email, phone) {
   try {
     const contactsArr = await getContactsList();
+    let newContactsArr = [];
     const newContact = {
       id: shortid(),
       name,
@@ -66,8 +66,10 @@ async function addContact(name, email, phone) {
       phone,
     };
 
-    contactsArr.push(newContact);
-    console.table(contactsArr);
+    newContactsArr.push(...contactsArr, newContact);
+    const newContactsList = JSON.stringify(newContactsArr);
+    await fs.writeFile(contactsPath, newContactsList, "utf8");
+    console.table(await getContactsList());
   } catch (error) {
     console.log(error);
   }
