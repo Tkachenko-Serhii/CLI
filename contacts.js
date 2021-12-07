@@ -1,4 +1,4 @@
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 const path = require("path");
 const fs = require("fs").promises;
 
@@ -60,7 +60,7 @@ async function addContact(name, email, phone) {
     const contactsArr = await getContactsList();
     let newContactsArr = [];
     const newContact = {
-      id: shortid(),
+      id: nanoid(),
       name,
       email,
       phone,
