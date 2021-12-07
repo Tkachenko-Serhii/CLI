@@ -8,7 +8,35 @@ async function getContactsList() {
   try {
     const contacts = await fs.readFile(contactsPath, "utf8");
     const contactsArr = JSON.parse(contacts);
-    return contactsArr;
+
+    function findError() {
+      if (contactsArr.length !== 0) {
+        return contactsArr;
+      }
+      return console.log("Sorry, but you contacts list is empty");
+    }
+    return findError();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getContact(contactId) {
+  try {
+    const contactsArr = await getContactsList();
+
+    const foundСontact = contactsArr.find((contact) => {
+      if (contact.id === contactId) {
+        return contact;
+      }
+    });
+
+    if (foundСontact) {
+      return foundСontact;
+    }
+    return console.log(
+      `Sorry, but you contacts list dosn't have contact with id ${contactId}.`
+    );
   } catch (error) {
     console.log(error);
   }
@@ -17,7 +45,10 @@ async function getContactsList() {
 async function listContacts() {
   try {
     const contactsArr = await getContactsList();
-    console.table(contactsArr);
+    if (contactsArr) {
+      console.table(contactsArr);
+    }
+    return;
   } catch (error) {
     console.log(error);
   }
@@ -25,13 +56,11 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   try {
-    const contactsArr = await getContactsList();
-
-    contactsArr.map((contact) => {
-      if (contact.id === contactId) {
-        console.table(contact);
-      }
-    });
+    const contact = await getContact(contactId);
+    if (contact) {
+      console.table(contact);
+    }
+    return;
   } catch (error) {
     console.log(error);
   }
@@ -39,17 +68,23 @@ async function getContactById(contactId) {
 
 async function removeContact(contactId) {
   try {
-    const contactsArr = await getContactsList();
-    let newContactsArr = [];
+    const foundContact = await getContact(contactId);
 
-    contactsArr.map((contact) => {
-      if (contact.id !== contactId) {
-        newContactsArr.push(contact);
-      }
-    });
-    const newContactsList = JSON.stringify(newContactsArr);
-    await fs.writeFile(contactsPath, newContactsList, "utf8");
-    console.table(newContactsArr);
+    if (foundContact) {
+      let newContactsArr = [];
+      const contactsArr = await getContactsList();
+
+      contactsArr.map((contact) => {
+        if (contact.id !== foundContact.id) {
+          newContactsArr.push(contact);
+        }
+      });
+      const newContactsList = JSON.stringify(newContactsArr);
+      await fs.writeFile(contactsPath, newContactsList, "utf8");
+      console.table(newContactsArr);
+    }
+
+    return;
   } catch (error) {
     console.log(error);
   }
