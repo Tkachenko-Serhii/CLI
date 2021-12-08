@@ -102,7 +102,7 @@ async function addContact(name, email, phone) {
     };
 
     newContactsArr.push(...contactsArr, newContact);
-    const newContactsList = JSON.stringify(newContactsArr);
+    const newContactsList = JSON.stringify(newContactsArr, null, 2);
     await fs.writeFile(contactsPath, newContactsList, "utf8");
     console.table(await getContactsList());
   } catch (error) {
